@@ -47,13 +47,17 @@ $dept_values = json_encode(array_column($dept_data, 'count'));
     <!-- Daily Volume Chart -->
     <div class="card">
         <h3>Daily Patient Volume (Last 7 Days)</h3>
-        <canvas id="dailyVolumeChart"></canvas>
+        <div class="chart-container" style="position: relative; height:40vh; width:100%">
+            <canvas id="dailyVolumeChart"></canvas>
+        </div>
     </div>
 
     <!-- Department Distribution Chart -->
     <div class="card">
         <h3>Appointments by Department</h3>
-        <canvas id="departmentDistChart"></canvas>
+        <div class="chart-container" style="position: relative; height:40vh; width:100%">
+            <canvas id="departmentDistChart"></canvas>
+        </div>
     </div>
 </div>
 
