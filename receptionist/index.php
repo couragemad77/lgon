@@ -112,10 +112,20 @@ $live_appointments = mysqli_fetch_all(mysqli_stmt_get_result($stmt_live), MYSQLI
 
     <!-- QR Scanner Section -->
     <div class="card">
-        <h3>Patient Check-in</h3>
+        <h3><i class="fas fa-id-card"></i> Patient Check-in</h3>
         <p>Scan the patient's QR code to check them into the queue.</p>
-        <button id="scan-qr-btn" class="btn btn-primary" style="width: 100%;">Scan Patient QR Code</button>
-        <div id="qr-reader-results" class="alert" style="display:none;"></div>
+        <button id="scan-qr-btn" class="btn btn-primary" style="width: 100%;"><i class="fas fa-qrcode"></i> Scan Patient QR Code</button>
+
+        <hr style="margin: 1.5rem 0;">
+
+        <p>Alternatively, enter the 6-digit code provided to the patient.</p>
+        <form id="code-checkin-form">
+            <div class="form-group">
+                <input type="text" id="checkin-code-input" class="form-control" placeholder="Enter 6-Digit Code" maxlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-secondary" style="width: 100%;"><i class="fas fa-keyboard"></i> Check-in with Code</button>
+        </form>
+        <div id="qr-reader-results" class="alert" style="display:none; margin-top: 1rem;"></div>
     </div>
 </div>
 
@@ -130,7 +140,7 @@ $live_appointments = mysqli_fetch_all(mysqli_stmt_get_result($stmt_live), MYSQLI
 </div>
 <script src="/gutu-hospital/assets/js/libraries/jquery.min.js"></script>
 <!-- QR Scanner Library -->
-<script src="/gutu-hospital/assets/js/libraries/html5-qrcode.min.js"></script>
+<script src="/gutu-hospital/assets/js/html5-qrcode.min.js"></script>
 
 <!-- Custom JS for this page -->
 <script src="/gutu-hospital/assets/js/receptionist_dashboard.js"></script>
