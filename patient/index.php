@@ -5,7 +5,7 @@ require_once '../backend/config.php';
 $patientId = $_SESSION['id'];
 
 // Query 1: Get all upcoming APPROVED appointments
-$approved_sql = "SELECT a.id, a.appointmentDateTime, a.qrCodeData, u.fullName AS doctorName, doc.departments 
+$approved_sql = "SELECT a.id, a.appointmentDateTime, a.qrCodeData, a.checkin_code, u.fullName AS doctorName, doc.departments
                  FROM appointments a 
                  JOIN doctors doc ON a.doctorId = doc.id 
                  JOIN users u ON doc.user_id = u.id 
@@ -37,9 +37,20 @@ $declined_appointment = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_declined
 ?>
 
 <style>
-    .qrcode-container { padding: 10px; background: white; width: 150px; height: 150px; margin: 0 auto; }
+    .qrcode-container { padding: 10px; background: white; width: 150px; height: 150px; margin: 0 auto; border-radius: 8px; }
     .qrcode-container canvas { width: 100% !important; height: 100% !important; }
     .qr-column { text-align: center; }
+    .checkin-code-display { margin-top: 1rem; }
+    .checkin-code-display span {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        letter-spacing: 3px;
+        background-color: #f0f4f8;
+        padding: 5px 15px;
+        border-radius: 5px;
+        border: 1px dashed var(--accent-color);
+    }
 </style>
 
 <h1>Patient Dashboard</h1>
@@ -68,11 +79,12 @@ $declined_appointment = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_declined
                         <td><?php echo date("l, M j, Y, g:i A", strtotime($appt['appointmentDateTime'])); ?></td>
                         <td class="qr-column">
                             <div class="qrcode-container" id="qrcode-<?php echo $appt['id']; ?>" data-qrdata="<?php echo htmlspecialchars($appt['qrCodeData']); ?>"></div>
-                            <button class="btn btn-secondary btn-sm download-qr-btn" style="margin-top: 10px;" 
-                                    data-target="#qrcode-<?php echo $appt['id']; ?>" 
-                                    data-filename="QR-Appointment-<?php echo date("Y-m-d", strtotime($appt['appointmentDateTime'])); ?>.png">
-                                Download
-                            </button>
+                            <?php if (!empty($appt['checkin_code'])): ?>
+                                <div class="checkin-code-display">
+                                    <p style="margin-bottom: 5px;">Or use this code:</p>
+                                    <span><?php echo htmlspecialchars($appt['checkin_code']); ?></span>
+                                </div>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

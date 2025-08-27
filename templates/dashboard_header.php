@@ -21,6 +21,8 @@ $userRole = $_SESSION["role"];
     <!-- We link both stylesheets. style.css for variables, dashboard.css for layout -->
     <link rel="stylesheet" href="/gutu-hospital/assets/css/style.css">
     <link rel="stylesheet" href="/gutu-hospital/assets/css/dashboard.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="dashboard-body">
     <style>
@@ -96,23 +98,23 @@ $userRole = $_SESSION["role"];
         <nav>
             <ul class="sidebar-nav">
                 <?php if ($userRole == 'patient'): ?>
-                    <li><a href="/gutu-hospital/patient/index.php" class="active">Dashboard</a></li>
-                    <li><a href="/gutu-hospital/patient/book-appointment.php">Book Appointment</a></li>
-                    <li><a href="/gutu-hospital/patient/history.php">Appointment History</a></li>
-                    <li><a href="/gutu-hospital/patient/settings.php">Settings</a></li>
+                    <li><a href="/gutu-hospital/patient/index.php" class="active"><i class="fas fa-tachometer-alt fa-fw"></i> <span>Dashboard</span></a></li>
+                    <li><a href="/gutu-hospital/patient/book-appointment.php"><i class="fas fa-calendar-plus fa-fw"></i> <span>Book Appointment</span></a></li>
+                    <li><a href="/gutu-hospital/patient/history.php"><i class="fas fa-history fa-fw"></i> <span>Appointment History</span></a></li>
+                    <li><a href="/gutu-hospital/patient/settings.php"><i class="fas fa-cog fa-fw"></i> <span>Settings</span></a></li>
                 <?php elseif ($userRole == 'doctor'): ?>
-                    <li><a href="/gutu-hospital/doctor/index.php" class="active">Dashboard</a></li>
-                    <li><a href="/gutu-hospital/doctor/schedule.php">My Schedule</a></li>
-                    <li><a href="/gutu-hospital/doctor/settings.php">Settings</a></li>
+                    <li><a href="/gutu-hospital/doctor/index.php" class="active"><i class="fas fa-tachometer-alt fa-fw"></i> <span>Dashboard</span></a></li>
+                    <li><a href="/gutu-hospital/doctor/schedule.php"><i class="fas fa-calendar-alt fa-fw"></i> <span>My Schedule</span></a></li>
+                    <li><a href="/gutu-hospital/doctor/settings.php"><i class="fas fa-cog fa-fw"></i> <span>Settings</span></a></li>
                 <?php elseif ($userRole == 'receptionist'): ?>
-                    <li><a href="/gutu-hospital/receptionist/index.php" class="active">Dashboard</a></li>
-                    <li><a href="/gutu-hospital/receptionist/manage-doctors.php">Manage Doctors</a></li>
-                    <li><a href="/gutu-hospital/receptionist/analytics.php">Analytics</a></li>
-                    <li><a href="/gutu-hospital/receptionist/settings.php">Settings</a></li>
+                    <li><a href="/gutu-hospital/receptionist/index.php" class="active"><i class="fas fa-tachometer-alt fa-fw"></i> <span>Dashboard</span></a></li>
+                    <li><a href="/gutu-hospital/receptionist/manage-doctors.php"><i class="fas fa-user-md fa-fw"></i> <span>Manage Doctors</span></a></li>
+                    <li><a href="/gutu-hospital/receptionist/analytics.php"><i class="fas fa-chart-line fa-fw"></i> <span>Analytics</span></a></li>
+                    <li><a href="/gutu-hospital/receptionist/settings.php"><i class="fas fa-cog fa-fw"></i> <span>Settings</span></a></li>
                 <?php endif; ?>
             </ul>
         </nav>
-        <a href="/gutu-hospital/backend/auth.php?action=logout" class="btn logout-btn">Logout</a>
+        <a href="/gutu-hospital/backend/auth.php?action=logout" class="btn logout-btn"><i class="fas fa-sign-out-alt fa-fw"></i> <span>Logout</span></a>
     </aside>
 
     <main class="main-content">

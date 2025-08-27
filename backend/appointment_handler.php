@@ -85,11 +85,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
 
         $qrCodeData = null;
         if ($newStatus == 'approved') {
-            // Generate a unique string for the QR code
+            // Generate a unique string for the QR code and a 6-digit check-in code
             $qrCodeData = uniqid('GUTU_APPT_', true);
-            $sql = "UPDATE appointments SET status = ?, qrCodeData = ? WHERE id = ?";
+            $checkinCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT); // 6-digit code
+            $sql = "UPDATE appointments SET status = ?, qrCodeData = ?, checkin_code = ? WHERE id = ?";
             $stmt = mysqli_prepare($link, $sql);
-            mysqli_stmt_bind_param($stmt, "ssi", $newStatus, $qrCodeData, $appointmentId);
+            mysqli_stmt_bind_param($stmt, "sssi", $newStatus, $qrCodeData, $checkinCode, $appointmentId);
         } else {
             $sql = "UPDATE appointments SET status = ? WHERE id = ?";
             $stmt = mysqli_prepare($link, $sql);
@@ -130,16 +131,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         }
         
         $qrCodeData = $_POST['qrCodeData'] ?? '';
-        if (empty($qrCodeData)) {
-            echo json_encode(['success' => false, 'message' => 'Error: QR Code data is missing.']);
+        $checkinCode = $_POST['checkin_code'] ?? '';
+
+        if (empty($qrCodeData) && empty($checkinCode)) {
+            echo json_encode(['success' => false, 'message' => 'Error: Check-in data is missing.']);
             exit;
         }
 
-        $sql = "SELECT id, status, appointmentDateTime FROM appointments WHERE qrCodeData = ?";
-        $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, "s", $qrCodeData);
-        mysqli_stmt_execute($stmt);
-        $appointment = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+        $appointment = null;
+        if (!empty($checkinCode)) {
+            // Prioritize check-in code if provided
+            $sql = "SELECT id, status, appointmentDateTime FROM appointments WHERE checkin_code = ? AND status = 'approved'";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, "s", $checkinCode);
+            mysqli_stmt_execute($stmt);
+            $appointment = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+        } elseif (!empty($qrCodeData)) {
+            // Fallback to QR code
+            $sql = "SELECT id, status, appointmentDateTime FROM appointments WHERE qrCodeData = ?";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, "s", $qrCodeData);
+            mysqli_stmt_execute($stmt);
+            $appointment = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+        }
 
         if (!$appointment) {
             echo json_encode(['success' => false, 'message' => 'Check-in Failed: Invalid QR Code.']);
